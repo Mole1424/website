@@ -3,4 +3,4 @@ RUN pip install pipenv
 WORKDIR /app
 COPY . .
 RUN pipenv install --system
-RUN pipenv run flask run
+CMD gunicord app:app -b 0.0.0.0:8080
