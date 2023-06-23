@@ -1,0 +1,44 @@
+.aboutme {
+    height: 92vh;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.aboutmelogocontainer {
+    height: 100%;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.aboutmelogo {
+    height: auto;
+    width: 80%;
+    border-radius: 10%;
+}
+
+.aboutmetext {
+    height: 100%;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.aboutmename {
+    color: var(--text);
+    font-size: 15vh;
+    margin-bottom: 0;
+    width: 80%;
+}
+
+.aboutmedescription {
+    color: var(--text);
+    font-size: 5vh;
+    width: 80%;
+}

@@ -1,4 +1,12 @@
+:root {
+    --background1: black;
+    --background2: rgb(58, 60, 62);
+    --accent: rgb(102, 83, 176);
+    --text: white;
+}
+
 body {
+    background-color: var(--background1);
     box-sizing: border-box;
     margin: 0;
     padding: 0;

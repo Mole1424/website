@@ -3,7 +3,7 @@
     align-items: center;
     justify-content: space-between;
     height: 8vh;
-    background-color: black;
+    background-color: var(--background2);
 }
 
 .logo {
@@ -26,6 +26,7 @@
 }
 
 .navlinksleft {
+    padding-left: 0;
     margin-right: auto;
     justify-content: flex-start;
 }
@@ -52,21 +53,26 @@
     justify-content: center;
     text-decoration: none;
     font-size: 3vh;
-    color: white;
+    color: var(--text);
     height: 100%;
+    transition: all 0.2s ease-in-out;
 }
 
 .navlink a:hover {
-    text-decoration: underline;
+    color: var(--accent);
 }
 
 .navsvg {
-    height: 6vh;
-    width: 6vh;
+    height: 3vh;
+    width: 3vh;
     object-fit: contain;
 }
 
-@media screen and (max-width: 700px) {
+.navsvg:hover path {
+    fill: var(--accent);
+}
+
+@media screen and (max-width: 500px) {
     .navbar {
         height: auto;
         flex-direction: column;
