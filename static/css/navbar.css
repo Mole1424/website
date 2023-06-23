@@ -7,7 +7,7 @@
 }
 
 .logo {
-    height: 80%;
+    height: 6vh;
     padding-left: 0.4%;
 }
 
@@ -42,6 +42,10 @@
     flex: 0 0 auto;
 }
 
+#lastnavlink {
+    margin-right: 20%;
+}
+
 .navlink a {
     display: flex;
     align-items: center;
@@ -52,8 +56,37 @@
     height: 100%;
 }
 
+.navlink a:hover {
+    text-decoration: underline;
+}
+
 .navsvg {
     height: 6vh;
     width: 6vh;
     object-fit: contain;
+}
+
+@media screen and (max-width: 700px) {
+    .navbar {
+        height: auto;
+        flex-direction: column;
+    }
+
+    .navlinksleft,
+    .navlinksright {
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+        padding-left: 0;
+        padding-right: 0;
+        flex: 0 0 auto;
+    }
+
+    #lastnavlink {
+        margin-right: 10%;
+    }
+
+    .logo {
+        margin-top: 2%;
+    }
 }
