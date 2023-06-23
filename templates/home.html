@@ -16,7 +16,9 @@
 
 <body>
     {% include 'navbar.html' %}
+    {% with homepage=homepage %}
     {% include 'aboutme.html' %}
+    {% endwith %}
 </body>
 
 </html>

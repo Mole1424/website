@@ -3,7 +3,14 @@
         <img src="../static/img/logo.png" alt="logo" class="aboutmelogo">
     </div>
     <div class="aboutmetext">
+        {% if homepage %}
         <h1 class="aboutmename">Hi, I'm Joel</h1>
-        <p class="aboutmedescription">A Computer Science Student at the University of Warwick</p>
+        <p class="aboutmedescription">A computer science student at the University of Warwick</p>
+        {% else %}
+        <p class="aboutmedescription">Hi, I'm Joel, a Computer Science student at the University of Warwick. My passion
+            for computer science started in 2015 with my first proper computer science lessons at secondary school. As a
+            tech officer at <a href="https://uwcs.co.uk" class="aboutmelink">UWCS</a>, I help maintain various projects
+            such as servers, discord bots, and websites (such as this one).</p>
+        {% endif %}
     </div>
 </div>
