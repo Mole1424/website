@@ -42,3 +42,23 @@
     font-size: 5vh;
     width: 80%;
 }
+
+@media screen and (max-width: 500px) {
+    .aboutme {
+        flex-direction: column;
+    }
+
+    .aboutmelogocontainer {
+        height: auto;
+        margin-top: 5%;
+        overflow: visible;
+    }
+
+    .aboutmetext {
+        width: 100%;
+    }
+
+    .aboutmename {
+        text-align: center;
+    }
+}
