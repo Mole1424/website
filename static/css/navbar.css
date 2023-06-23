@@ -49,6 +49,7 @@
 
 .navlink a {
     display: flex;
+    position: relative;
     align-items: center;
     justify-content: center;
     text-decoration: none;
@@ -62,13 +63,29 @@
     color: var(--accent);
 }
 
+.navlink>a::after {
+    position: absolute;
+    bottom: 15%;
+    content: "";
+    display: block;
+    width: 0;
+    height: 2px;
+    background: var(--accent);
+    transition: width 0.3s;
+}
+
+.navlink>a:hover::after {
+    width: 100%;
+    transition: width 0.3s;
+}
+
 .navsvg {
     height: 3vh;
     width: 3vh;
     object-fit: contain;
 }
 
-.navsvg:hover path {
+.navlink>a:hover>.navsvg path {
     fill: var(--accent);
 }
 

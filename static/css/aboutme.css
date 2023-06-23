@@ -48,14 +48,11 @@
 .aboutmelink {
     color: var(--text);
     text-decoration: underline;
+    transition: all 0.2s ease-in;
 }
 
 .aboutmelink:hover {
     color: var(--accent);
-}
-
-.aboutmelink:visited {
-    color: var(--text);
 }
 
 @media screen and (max-width: 500px) {
