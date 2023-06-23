@@ -11,3 +11,7 @@ def home():
 @app.route("/aboutme/")
 def about_me():
     return render_template("aboutmepage.html")
+
+@app.route("/projects/")
+def projects():
+    return "Coming soon(tm)...."
