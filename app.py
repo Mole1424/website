@@ -8,10 +8,10 @@ def home():
     return render_template("home.html")
 
 
-@app.route("/aboutme/")
+@app.route("/aboutme")
 def about_me():
     return render_template("aboutmepage.html")
 
-@app.route("/projects/")
+@app.route("/projects")
 def projects():
     return "Coming soon(tm)...."
