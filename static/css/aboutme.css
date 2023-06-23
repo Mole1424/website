@@ -54,6 +54,10 @@
     color: var(--accent);
 }
 
+.aboutmelink:visited {
+    color: var(--text);
+}
+
 @media screen and (max-width: 500px) {
     .aboutme {
         flex-direction: column;
