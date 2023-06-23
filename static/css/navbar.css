@@ -1,0 +1,98 @@
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 8vh;
+    background-color: var(--background2);
+}
+
+.logo {
+    height: 6vh;
+    padding-left: 0.4%;
+}
+
+.logo img {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+    border-radius: 10%;
+}
+
+.navlinksleft,
+.navlinksright {
+    height: 100%;
+    list-style: none;
+    display: flex;
+}
+
+.navlinksleft {
+    padding-left: 0;
+    margin-right: auto;
+    justify-content: flex-start;
+}
+
+.navlinksright {
+    margin-left: auto;
+    justify-content: flex-end;
+    flex: 0 0 auto;
+}
+
+.navlink {
+    padding: 0;
+    margin: 0 10%;
+    flex: 0 0 auto;
+}
+
+#lastnavlink {
+    margin-right: 20%;
+}
+
+.navlink a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 3vh;
+    color: var(--text);
+    height: 100%;
+    transition: all 0.2s ease-in-out;
+}
+
+.navlink a:hover {
+    color: var(--accent);
+}
+
+.navsvg {
+    height: 3vh;
+    width: 3vh;
+    object-fit: contain;
+}
+
+.navsvg:hover path {
+    fill: var(--accent);
+}
+
+@media screen and (max-width: 500px) {
+    .navbar {
+        height: auto;
+        flex-direction: column;
+    }
+
+    .navlinksleft,
+    .navlinksright {
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+        padding-left: 0;
+        padding-right: 0;
+        flex: 0 0 auto;
+    }
+
+    #lastnavlink {
+        margin-right: 10%;
+    }
+
+    .logo {
+        margin-top: 2%;
+    }
+}
