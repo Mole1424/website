@@ -9,7 +9,6 @@ gunicorn = "*"
 flask-sqlalchemy = "*"
 markdown = "*"
 werkzeug = "*"
-pyyaml = "*"
 
 [dev-packages]
 

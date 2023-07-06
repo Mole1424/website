@@ -1,18 +1,15 @@
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, request
 from db_schema import db, Projects
 from markdown import markdown
-from werkzeug.security import generate_password_hash, check_password_hash
-import yaml
+from werkzeug.security import check_password_hash
+from os import getenv
 
 app = Flask(__name__)
 
-with open("config.yaml", "r") as f:
-    config = yaml.safe_load(f).get("config")
-
-app.config['SQLALCHEMY_DATABASE_URI'] = config.get("database_uri")
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
-resetdb = False
+resetdb = True
 if resetdb:
     with app.app_context():
         db.drop_all()
@@ -46,7 +43,7 @@ def edit_project(project_id):
 
 @app.route("/projects/<int:project_id>/editing", methods=["POST"])
 def editing_project(project_id):
-    if check_password_hash(config.get("password"), request.form['password']):
+    if check_password_hash(getenv("DB_PASSWORD"), request.form['password']):
         project = Projects.query.filter_by(id=project_id).first()
         project.title = request.form['title']
         project.description = request.form['description']
@@ -62,7 +59,7 @@ def new_project():
 
 @app.route("/projects/creatingnewproject", methods=["POST"])
 def creating_new_project():
-    if check_password_hash(config.get("password"), request.form['password']):
+    if check_password_hash(getenv("DB_PASSWORD"), request.form['password']):
         project = Projects(request.form['title'], request.form['description'], request.form['image'], request.form['blog'])
         db.session.add(project)
         db.session.commit()
@@ -75,7 +72,7 @@ def delete_project_page(project_id):
 
 @app.route("/projects/<int:project_id>/deleting", methods=["POST"])
 def delete_project(project_id):
-    if check_password_hash(config.get("password"), request.form['password']):
+    if check_password_hash(getenv("DB_PASSWORD"), request.form['password']):
         project = Projects.query.filter_by(id=project_id).first()
         db.session.delete(project)
         db.session.commit()
