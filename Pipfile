@@ -6,6 +6,10 @@ name = "pypi"
 [packages]
 flask = "*"
 gunicorn = "*"
+flask-sqlalchemy = "*"
+markdown = "*"
+werkzeug = "*"
+pyyaml = "*"
 
 [dev-packages]
 

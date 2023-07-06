@@ -1,0 +1,3 @@
+config:
+  password: PasswordToEditBlogPosts
+  database_uri: path_to_database
