@@ -1,14 +1,16 @@
 :root {
-    --background1: black;
-    --background2: rgb(58, 60, 62);
-    --accent: rgb(102, 83, 176);
+    --background1: rgb(26, 26, 26);
+    --background2: rgb(35, 35, 35);
+    --accent: rgb(183, 126, 254);
     --text: white;
 }
 
 body {
     background-color: var(--background1);
+    color: var(--text);
     box-sizing: border-box;
     margin: 0;
+    margin-top: 8vh;
     padding: 0;
     font-family: Arial, Helvetica, sans-serif;
 }

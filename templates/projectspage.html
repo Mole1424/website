@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %} Joel's Projects {% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="../static/css/projects.css"> {% endblock %}
+
+{% block content %}
+{% with projects=projects%}
+{% include 'projects.html' %}
+{% endwith %}
+{% endblock %}

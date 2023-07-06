@@ -1,0 +1,52 @@
+.projectform {
+    width: 80vw;
+    margin: 0 auto;
+    margin-top: 10vh;
+    background-color: var(--background2);
+    border-radius: 10px;
+    padding: 2vh;
+}
+
+.field {
+    position: relative;
+    width: 100%;
+    padding-bottom: 2vh;
+}
+
+.field label {
+    font-size: larger;
+}
+
+.field input,
+.field textarea {
+    width: 100%;
+    background: none;
+    color: var(--text);
+    padding: 3px;
+    border-radius: 5px;
+    border-color: var(--accent);
+    margin-top: 1vh;
+}
+
+#blog {
+    height: 40vh;
+}
+
+.projectbutton {
+    display: block;
+    margin: auto;
+    width: 50%;
+    color: var(--text);
+    background-color: var(--background2);
+    border: none;
+    transition: all 0.2s ease-in-out;
+    font-size: larger;
+    border: 1px solid var(--accent);
+    border-radius: 5px;
+    transition: all 0.2s ease-in-out;
+}
+
+.projectbutton:hover {
+    cursor: pointer;
+    scale: 1.1;
+}

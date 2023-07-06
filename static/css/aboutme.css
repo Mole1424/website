@@ -62,7 +62,7 @@
 
     .aboutmelogocontainer {
         height: auto;
-        margin-top: 5%;
+        margin-top: 10vh;
         overflow: visible;
     }
 
@@ -72,5 +72,6 @@
 
     .aboutmename {
         text-align: center;
+        font-size: 15vw;
     }
 }

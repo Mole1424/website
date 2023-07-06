@@ -1,24 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Joel's Webpage</title>
-    <link rel="icon" href="/static/img/logo.png" type="image/icon type">
-    <meta name="description" content="Website for Joel Coulon">
-    <meta name="keywords" content="Joel, Coulon, Joel Coulon, Mole1424, Programming, University of Warwick">
-    <link rel="stylesheet" href="../static/css/main.css">
-    <link rel="stylesheet" href="../static/css/navbar.css">
-    <link rel="stylesheet" href="../static/css/aboutme.css">
-</head>
-
-<body>
-    {% include 'navbar.html' %}
-    {% with homepage=homepage %}
-    {% include 'aboutme.html' %}
-    {% endwith %}
-</body>
-
-</html>
+{% extends "base.html" %}
+{% block title %} Joel Coulon {% endblock %}
+{% block head %}
+<link rel="stylesheet" href="../static/css/aboutme.css">
+<link rel="stylesheet" href="../static/css/projects.css">
+{% endblock %}
+{% block content %}
+{% with homepage=homepage %}
+{% include 'aboutme.html' %}
+{% endwith %}
+{% with projects=projects %}
+{% include 'projects.html' %}
+{% endwith %}
+{% endblock %}
