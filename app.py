@@ -10,7 +10,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = getenv("DB_URI")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
-resetdb = True
+resetdb = False
 if resetdb:
     with app.app_context():
         db.drop_all()
