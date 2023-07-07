@@ -3,6 +3,7 @@ from db_schema import db, Projects
 from markdown import markdown
 from werkzeug.security import check_password_hash
 from os import getenv
+from markupsafe import escape
 
 app = Flask(__name__)
 
@@ -51,7 +52,7 @@ def editing_project(project_id):
         project.title = request.form['title']
         project.description = request.form['description']
         project.image = request.form['image']
-        project.blog = request.form['blog']
+        project.blog = escape(request.form['blog'])
         db.session.commit()
         return redirect(f"/projects/{project_id}")
     return redirect(f"/projects/{project_id}/edit")
@@ -63,7 +64,7 @@ def new_project():
 @app.route("/projects/creatingnewproject", methods=["POST"])
 def creating_new_project():
     if check_password_hash(password, request.form['password']):
-        project = Projects(request.form['title'], request.form['description'], request.form['image'], request.form['blog'])
+        project = Projects(request.form['title'], request.form['description'], request.form['image'], escape(request.form['blog']))
         db.session.add(project)
         db.session.commit()
         return redirect(f"/projects/{project.id}")
