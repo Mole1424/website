@@ -6,6 +6,8 @@ from os import getenv
 
 app = Flask(__name__)
 
+password = getenv("DB_PASSWORD")
+
 app.config['SQLALCHEMY_DATABASE_URI'] = getenv("DB_URI")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
@@ -44,7 +46,7 @@ def edit_project(project_id):
 
 @app.route("/projects/<int:project_id>/editing", methods=["POST"])
 def editing_project(project_id):
-    if check_password_hash(getenv("DB_PASSWORD"), request.form['password']):
+    if check_password_hash(password, request.form['password']):
         project = Projects.query.filter_by(id=project_id).first()
         project.title = request.form['title']
         project.description = request.form['description']
@@ -60,7 +62,7 @@ def new_project():
 
 @app.route("/projects/creatingnewproject", methods=["POST"])
 def creating_new_project():
-    if check_password_hash(getenv("DB_PASSWORD"), request.form['password']):
+    if check_password_hash(password, request.form['password']):
         project = Projects(request.form['title'], request.form['description'], request.form['image'], request.form['blog'])
         db.session.add(project)
         db.session.commit()
@@ -73,7 +75,7 @@ def delete_project_page(project_id):
 
 @app.route("/projects/<int:project_id>/deleting", methods=["POST"])
 def delete_project(project_id):
-    if check_password_hash(getenv("DB_PASSWORD"), request.form['password']):
+    if check_password_hash(password, request.form['password']):
         project = Projects.query.filter_by(id=project_id).first()
         db.session.delete(project)
         db.session.commit()
