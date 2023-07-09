@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %} Project not found {% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="/static/css/noproject.css">
+{% endblock %}
+
+{% block content %}
+<div class="noproject">
+    <h1>Project not found</h1>
+    <p>Other projects can be found <a href="/projects">here</a></p>
+</div>
+{% endblock %}
