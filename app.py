@@ -151,7 +151,7 @@ LOGGINGIN_URL = "/" + getenv("LOGGINGIN_URL")
 def login():
     # because all you need for the login page is password box and submit, can reuse editproject.html (kinda cursed ngl)
     return render_template(
-        "editproject.html", action="/loggingin", title="Logging In", delete=True
+        "editproject.html", action=LOGGINGIN_URL, title="Logging In", delete=True
     )
 
 
