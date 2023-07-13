@@ -2,6 +2,8 @@ from functools import wraps
 from os import getenv
 
 from flask import Flask, redirect, render_template, request, session
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from markdown import markdown
 from markupsafe import escape
 from werkzeug.security import check_password_hash
@@ -31,6 +33,14 @@ def login_required(func):  # decorator to restrict access to certain pages
     return wrapper
 
 
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["50 per hour"],
+    storage_uri="memory://",
+)
+
+
 @app.route("/")
 @app.route("/home")
 def home():
@@ -54,7 +64,9 @@ def project(project_id):
     project = Projects.query.filter_by(id=project_id).first()
     if project is None:  # protect against invalid project ids which caused 500 errors
         return render_template("noproject.html")
-    markdown_html = markdown(project.blog)  # converts markdown to html for blog
+    markdown_html = markdown(
+        escape(project.blog)
+    )  # converts markdown to html for blog and escapes to prevent XSS
     return render_template(
         "projectpage.html", project=project, markdown_html=markdown_html
     )
@@ -84,7 +96,7 @@ def editing_project(project_id):
         project.title = request.form["title"]
         project.description = request.form["description"]
         project.image = request.form["image"]
-        project.blog = escape(request.form["blog"])
+        project.blog = request.form["blog"]
         db.session.commit()
         return redirect(f"/projects/{project_id}")
     return redirect(f"/projects/{project_id}/edit")
@@ -113,7 +125,7 @@ def creating_new_project():
             request.form["title"],
             request.form["description"],
             request.form["image"],
-            escape(request.form["blog"]),  # escape() prevents XSS
+            request.form["blog"],
         )
         db.session.add(project)
         db.session.commit()
@@ -156,6 +168,7 @@ def login():
 
 
 @app.route(LOGGINGIN_URL, methods=["POST"])
+@limiter.limit("50/hour")
 def logging_in():
     if check_password_hash(password, request.form["password"]):
         session["logged_in"] = True
