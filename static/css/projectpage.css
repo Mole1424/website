@@ -1,5 +1,5 @@
 .projectarticle {
-    width: 80vw;
+    max-width: 80vw;
     margin: auto;
 }
 
@@ -13,8 +13,9 @@
 }
 
 .imgtitle img {
-    height: 30vh;
+    max-height: 30vh;
     width: auto;
+    max-width: 30vw;
     border-radius: 10px;
 }
 
@@ -42,15 +43,17 @@
 
 .fullblog img {
     max-height: 25vh;
-    width: auto;
+    max-width: 100%;
     border-radius: 10px;
 }
 
 .fullblog pre {
     display: inline-block;
+    max-width: 100%;
     background-color: var(--background2);
     border-radius: 10px;
     padding: 1vh 1vw;
+    overflow: scroll;
 }
 
 .fullblog code {
@@ -59,7 +62,6 @@
 
 @media screen and (max-width: 500px) {
     .projectarticle {
-        width: 90vw;
         padding-top: 10vh;
     }
 
@@ -68,18 +70,17 @@
     }
 
     .imgtitle img {
-        height: 20vh;
+        max-height: 20vh;
+        max-width: 100%;
     }
 
     .description {
-        width: 90vw;
+        width: 100%;
         padding-top: 2vh;
-        padding-left: none;
     }
 
     .description h1 {
         margin-top: 0;
         font-size: 5vh;
-        width: 90vw;
     }
 }

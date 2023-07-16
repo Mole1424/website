@@ -33,7 +33,7 @@ def login_required(func):  # decorator to restrict access to certain pages
     return wrapper
 
 
-limiter = Limiter(
+limiter = Limiter(  # limits the amount of requests per hour (mainly for logging in page for security)
     get_remote_address,
     app=app,
     default_limits=["50 per hour"],
@@ -46,6 +46,7 @@ limiter = Limiter(
 def home():
     projects = Projects.query.all()
     return render_template("home.html", homepage=True, projects=projects)
+    # hompeage is used to determine whether to show the long about me or not
 
 
 @app.route("/aboutme")
@@ -64,12 +65,38 @@ def project(project_id):
     project = Projects.query.filter_by(id=project_id).first()
     if project is None:  # protect against invalid project ids which caused 500 errors
         return render_template("noproject.html")
-    markdown_html = markdown(
-        escape(project.blog)
-    )  # converts markdown to html for blog and escapes to prevent XSS
+    markdown_html = remove_amp_from_code_tags(
+        markdown(escape(project.blog))
+    )  # converts markdown to html (escape is used to prevent xss)
     return render_template(
         "projectpage.html", project=project, markdown_html=markdown_html
     )
+
+
+def remove_amp_from_code_tags(text):
+    lines = text.splitlines()  # Split the text into lines
+
+    code_block = False
+    modified_lines = []
+
+    for line in lines:
+        if "<code>" in line:
+            code_block = True
+            modified_lines.append(line)
+            continue
+
+        if "</code>" in line:
+            code_block = False
+            modified_lines.append(line)
+            continue
+
+        if code_block:
+            # Remove "amp;" from code content
+            line = line.replace("amp;", "")
+
+        modified_lines.append(line)
+
+    return "\n".join(modified_lines)  # Join the lines back together
 
 
 @app.route("/projects/<int:project_id>/edit")
