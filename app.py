@@ -25,9 +25,9 @@ def login_required(func):  # decorator to restrict access to certain pages
     @wraps(func)
     def wrapper(*args, **kwargs):
         if "logged_in" in session:
-            if session["logged_in"]:
+            if session["logged_in"]:  # if the user is logged in then allow access
                 return func(*args, **kwargs)
-        return redirect("/")
+        return redirect("/")  # otherwise redirect to home page
 
     wrapper.__name__ = func.__name__
     return wrapper
@@ -74,29 +74,33 @@ def project(project_id):
 
 
 def remove_amp_from_code_tags(text):
-    lines = text.splitlines()  # Split the text into lines
+    # removes "amp;" from code tags to fix escaping issues
 
+    lines = text.splitlines()  # split all html by lines
     code_block = False
     modified_lines = []
 
     for line in lines:
-        if "<code>" in line:
+        if "<code>" in line:  # when opening tag is found now in code block
             code_block = True
+            line = line.replace(
+                "amp;", ""
+            )  # some code will be on same line as decleration
             modified_lines.append(line)
             continue
 
-        if "</code>" in line:
+        if "</code>" in line:  # when closing tag is found no longer in code block
             code_block = False
+            line = line.replace("amp;", "")
             modified_lines.append(line)
             continue
 
-        if code_block:
-            # Remove "amp;" from code content
+        if code_block:  # during code block remove amps
             line = line.replace("amp;", "")
 
-        modified_lines.append(line)
+        modified_lines.append(line)  # if nothing just append unedited line
 
-    return "\n".join(modified_lines)  # Join the lines back together
+    return "\n".join(modified_lines)
 
 
 @app.route("/projects/<int:project_id>/edit")
@@ -125,6 +129,8 @@ def editing_project(project_id):
         project.image = request.form["image"]
         project.blog = request.form["blog"]
         db.session.commit()
+        # gets all the data from the form and updates the project
+        # dont have to check for change as all fields are pre-populated
         return redirect(f"/projects/{project_id}")
     return redirect(f"/projects/{project_id}/edit")
 
@@ -132,6 +138,7 @@ def editing_project(project_id):
 @app.route("/projects/newproject")
 @login_required
 def new_project():
+    # same as edit project but with empty fields
     return render_template(
         "editproject.html",
         action="/projects/creatingnewproject",
@@ -195,7 +202,7 @@ def login():
 
 
 @app.route(LOGGINGIN_URL, methods=["POST"])
-@limiter.limit("50/hour")
+@limiter.limit("50/hour")  # limits the amount of requests per hour
 def logging_in():
     if check_password_hash(password, request.form["password"]):
         session["logged_in"] = True
