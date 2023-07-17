@@ -45,6 +45,7 @@ limiter = Limiter(  # limits the amount of requests per hour (mainly for logging
 @app.route("/home")
 def home():
     projects = Projects.query.all()
+    projects.reverse()  # reverses the order of the projects so newest is first
     return render_template("home.html", homepage=True, projects=projects)
     # hompeage is used to determine whether to show the long about me or not
 
@@ -57,6 +58,7 @@ def about_me():
 @app.route("/projects")
 def projects():
     projects = Projects.query.all()
+    projects.reverse()
     return render_template("projectspage.html", projects=projects)
 
 
