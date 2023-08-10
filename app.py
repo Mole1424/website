@@ -1,3 +1,4 @@
+from logging import log
 from functools import wraps
 from os import getenv
 
@@ -27,6 +28,8 @@ def login_required(func):  # decorator to restrict access to certain pages
         if "logged_in" in session:
             if session["logged_in"]:  # if the user is logged in then allow access
                 return func(*args, **kwargs)
+            else:
+                log(f"{request.remote_addr} tried to access {request.path}")
         return redirect("/")  # otherwise redirect to home page
 
     wrapper.__name__ = func.__name__
@@ -197,6 +200,7 @@ LOGGINGIN_URL = "/" + getenv("LOGGINGIN_URL")
 
 @app.route(LOGIN_URL)
 def login():
+    log(f"{request.remote_addr} accessed the login page")
     # because all you need for the login page is password box and submit, can reuse editproject.html (kinda cursed ngl)
     return render_template(
         "editproject.html", action=LOGGINGIN_URL, title="Logging In", delete=True
@@ -208,4 +212,9 @@ def login():
 def logging_in():
     if check_password_hash(password, request.form["password"]):
         session["logged_in"] = True
+        log(f"{request.remote_addr} logged in")
+    else:
+        log(
+            f"{request.remote_addr} failed to log in with password {request.form['password']}"
+        )
     return redirect("/")
