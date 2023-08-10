@@ -22,7 +22,7 @@ db.init_app(app)
 app.secret_key = getenv("SECRET_KEY")
 
 
-def login_required(func):  # decorator to restrict access to certain pages
+def login_required(func, request):  # decorator to restrict access to certain pages
     @wraps(func)
     def wrapper(*args, **kwargs):
         if "logged_in" in session:
@@ -109,7 +109,7 @@ def remove_amp_from_code_tags(text):
 
 
 @app.route("/projects/<int:project_id>/edit")
-@login_required
+@login_required(request)
 def edit_project(project_id):
     project = Projects.query.filter_by(id=project_id).first()
     return render_template(
@@ -124,7 +124,7 @@ def edit_project(project_id):
 
 
 @app.route("/projects/<int:project_id>/editing", methods=["POST"])
-@login_required
+@login_required(request)
 def editing_project(project_id):
     # edits project if password is correct
     if check_password_hash(password, request.form["password"]):
@@ -141,7 +141,7 @@ def editing_project(project_id):
 
 
 @app.route("/projects/newproject")
-@login_required
+@login_required(request)
 def new_project():
     # same as edit project but with empty fields
     return render_template(
@@ -156,7 +156,7 @@ def new_project():
 
 
 @app.route("/projects/creatingnewproject", methods=["POST"])
-@login_required
+@login_required(request)
 def creating_new_project():
     if check_password_hash(password, request.form["password"]):
         # creates new project if password is correct
@@ -173,7 +173,7 @@ def creating_new_project():
 
 
 @app.route("/projects/<int:project_id>/delete")
-@login_required
+@login_required(request)
 def delete_project_page(project_id):
     return render_template(
         "editproject.html",
@@ -184,7 +184,7 @@ def delete_project_page(project_id):
 
 
 @app.route("/projects/<int:project_id>/deleting", methods=["POST"])
-@login_required
+@login_required(request)
 def delete_project(project_id):
     if check_password_hash(password, request.form["password"]):
         project = Projects.query.filter_by(id=project_id).first()
