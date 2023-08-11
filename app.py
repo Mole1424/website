@@ -28,8 +28,6 @@ def login_required(func):  # decorator to restrict access to certain pages
         if "logged_in" in session:
             if session["logged_in"]:  # if the user is logged in then allow access
                 return func(*args, **kwargs)
-            else:
-                info(f"{request.remote_addr} tried to access {request.path}")
         return redirect("/")  # otherwise redirect to home page
 
     wrapper.__name__ = func.__name__
@@ -126,8 +124,10 @@ def edit_project(project_id):
 @app.route("/projects/<int:project_id>/editing", methods=["POST"])
 @login_required()
 def editing_project(project_id):
+    correct_password = check_password_hash(password, request.form["password"])
+    log_blog_change(request, "edited", project_id, correct_password)
     # edits project if password is correct
-    if check_password_hash(password, request.form["password"]):
+    if correct_password:
         project = Projects.query.filter_by(id=project_id).first()
         project.title = request.form["title"]
         project.description = request.form["description"]
@@ -158,7 +158,8 @@ def new_project():
 @app.route("/projects/creatingnewproject", methods=["POST"])
 @login_required()
 def creating_new_project():
-    if check_password_hash(password, request.form["password"]):
+    correct_password = check_password_hash(password, request.form["password"])
+    if correct_password:
         # creates new project if password is correct
         project = Projects(
             request.form["title"],
@@ -168,7 +169,9 @@ def creating_new_project():
         )
         db.session.add(project)
         db.session.commit()
+        log_blog_change(request, "created", project.id, True)
         return redirect(f"/projects/{project.id}")
+    log_blog_change(request, "created", -1, False)
     return redirect("/projects/newproject")
 
 
@@ -186,12 +189,22 @@ def delete_project_page(project_id):
 @app.route("/projects/<int:project_id>/deleting", methods=["POST"])
 @login_required()
 def delete_project(project_id):
-    if check_password_hash(password, request.form["password"]):
+    correct_password = check_password_hash(password, request.form["password"])
+    log_blog_change(request, "deleted", project_id, correct_password)
+    # deletes project if password is correct
+    if correct_password:
         project = Projects.query.filter_by(id=project_id).first()
         db.session.delete(project)
         db.session.commit()
         return redirect("/projects")
     return redirect(f"/projects/{project_id}")
+
+
+def log_blog_change(request, action, project_id, success):
+    # higher order functions++
+    status = "successfully" if success else "unsuccessfully"
+    log_func = info if success else warning
+    log_func(f"{request.remote_addr} {action} blog for project {project_id} {status}")
 
 
 LOGIN_URL = "/" + getenv("LOGIN_URL")
@@ -213,8 +226,9 @@ def logging_in():
     if check_password_hash(password, request.form["password"]):
         session["logged_in"] = True
         info(f"{request.remote_addr} logged in")
+        return redirect("/")
     else:
         warning(
             f"{request.remote_addr} failed to log in with password {request.form['password']}"
         )
-    return redirect("/")
+    return redirect(f"/{LOGIN_URL}")
