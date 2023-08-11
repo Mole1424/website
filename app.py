@@ -107,7 +107,7 @@ def remove_amp_from_code_tags(text):
 
 
 @app.route("/projects/<int:project_id>/edit")
-@login_required()
+@login_required
 def edit_project(project_id):
     project = Projects.query.filter_by(id=project_id).first()
     return render_template(
@@ -122,7 +122,7 @@ def edit_project(project_id):
 
 
 @app.route("/projects/<int:project_id>/editing", methods=["POST"])
-@login_required()
+@login_required
 def editing_project(project_id):
     correct_password = check_password_hash(password, request.form["password"])
     log_blog_change(request, "edited", project_id, correct_password)
@@ -141,7 +141,7 @@ def editing_project(project_id):
 
 
 @app.route("/projects/newproject")
-@login_required()
+@login_required
 def new_project():
     # same as edit project but with empty fields
     return render_template(
@@ -156,7 +156,7 @@ def new_project():
 
 
 @app.route("/projects/creatingnewproject", methods=["POST"])
-@login_required()
+@login_required
 def creating_new_project():
     correct_password = check_password_hash(password, request.form["password"])
     if correct_password:
@@ -176,7 +176,7 @@ def creating_new_project():
 
 
 @app.route("/projects/<int:project_id>/delete")
-@login_required()
+@login_required
 def delete_project_page(project_id):
     return render_template(
         "editproject.html",
@@ -187,7 +187,7 @@ def delete_project_page(project_id):
 
 
 @app.route("/projects/<int:project_id>/deleting", methods=["POST"])
-@login_required()
+@login_required
 def delete_project(project_id):
     correct_password = check_password_hash(password, request.form["password"])
     log_blog_change(request, "deleted", project_id, correct_password)
