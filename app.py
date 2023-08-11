@@ -2,7 +2,7 @@ from functools import wraps
 from logging import info, warning
 from os import getenv
 
-from flask import Flask, redirect, render_template, request, session
+from flask import Flask, redirect, render_template, request, session, url_for
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from markdown import markdown
@@ -64,7 +64,7 @@ def projects():
 
 
 @app.route("/projects/<int:project_id>")
-def project(project_id):
+def project(project_id: int):
     project = Projects.query.filter_by(id=project_id).first()
     if project is None:  # protect against invalid project ids which caused 500 errors
         return render_template("noproject.html")
@@ -76,7 +76,7 @@ def project(project_id):
     )
 
 
-def remove_amp_from_code_tags(text):
+def remove_amp_from_code_tags(text: str):
     # removes "amp;" from code tags to fix escaping issues
 
     lines = text.splitlines()  # split all html by lines
@@ -108,7 +108,7 @@ def remove_amp_from_code_tags(text):
 
 @app.route("/projects/<int:project_id>/edit")
 @login_required
-def edit_project(project_id):
+def edit_project(project_id: int):
     project = Projects.query.filter_by(id=project_id).first()
     return render_template(
         "editproject.html",
@@ -123,9 +123,9 @@ def edit_project(project_id):
 
 @app.route("/projects/<int:project_id>/editing", methods=["POST"])
 @login_required
-def editing_project(project_id):
+def editing_project(project_id: int):
     correct_password = check_password_hash(password, request.form["password"])
-    log_blog_change(request, "edited", project_id, correct_password)
+    log_blog_change(request.remote_addr, "edited", project_id, correct_password)
     # edits project if password is correct
     if correct_password:
         project = Projects.query.filter_by(id=project_id).first()
@@ -169,15 +169,15 @@ def creating_new_project():
         )
         db.session.add(project)
         db.session.commit()
-        log_blog_change(request, "created", project.id, True)
+        log_blog_change(request.remote_addr, "created", project.id, True)
         return redirect(f"/projects/{project.id}")
-    log_blog_change(request, "created", -1, False)
+    log_blog_change(request.remote_addr, "created", -1, False)
     return redirect("/projects/newproject")
 
 
 @app.route("/projects/<int:project_id>/delete")
 @login_required
-def delete_project_page(project_id):
+def delete_project_page(project_id: int):
     return render_template(
         "editproject.html",
         action=f"/projects/{project_id}/deleting",
@@ -188,9 +188,9 @@ def delete_project_page(project_id):
 
 @app.route("/projects/<int:project_id>/deleting", methods=["POST"])
 @login_required
-def delete_project(project_id):
+def delete_project(project_id: int):
     correct_password = check_password_hash(password, request.form["password"])
-    log_blog_change(request, "deleted", project_id, correct_password)
+    log_blog_change(request.remote_addr, "deleted", project_id, correct_password)
     # deletes project if password is correct
     if correct_password:
         project = Projects.query.filter_by(id=project_id).first()
@@ -200,11 +200,11 @@ def delete_project(project_id):
     return redirect(f"/projects/{project_id}")
 
 
-def log_blog_change(request, action, project_id, success):
+def log_blog_change(ip: str, action: str, project_id: int, success: bool):
     # higher order functions++
     status = "successfully" if success else "unsuccessfully"
     log_func = info if success else warning
-    log_func(f"{request.remote_addr} {action} blog for project {project_id} {status}")
+    log_func(f"{ip} {action} blog for project {project_id} {status}")
 
 
 LOGIN_URL = "/" + getenv("LOGIN_URL")
@@ -231,4 +231,4 @@ def logging_in():
         warning(
             f"{request.remote_addr} failed to log in with password {request.form['password']}"
         )
-    return redirect(f"/{LOGIN_URL}")
+    return redirect(url_for(LOGIN_URL))
