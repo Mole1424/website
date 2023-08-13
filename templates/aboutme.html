@@ -1,16 +1,37 @@
-<div class="aboutme">
-    <div class="aboutmelogocontainer">
-        <img src="../static/img/logo.png" alt="logo" class="aboutmelogo">
+{% if homepage %}
+<div class="aboutmecontainer">
+    {% endif %}
+    <div class="aboutme{{'full' if not homepage}}">
+        <div class="aboutmelogocontainer">
+            <img src="../static/img/logo.png" alt="logo" class="aboutmelogo">
+        </div>
+        <div class="aboutmetext">
+            {% if homepage %}
+            <h1 class="aboutmename">Hi, I'm Joel</h1>
+            <p class="aboutmedescription">A computer science student at the University of Warwick</p>
+            {% else %}
+            <p class="aboutmedescription">Hi, I'm Joel, a Computer Science student at the University of Warwick. My
+                passion
+                for computer science started in 2015 with my first proper computer science lessons at secondary school.
+                As a
+                tech officer at <a href="https://uwcs.co.uk" class="aboutmelink">UWCS</a>, I help maintain various
+                projects
+                such as servers, discord bots, and websites (such as this one).</p>
+            {% endif %}
+        </div>
     </div>
-    <div class="aboutmetext">
-        {% if homepage %}
-        <h1 class="aboutmename">Hi, I'm Joel</h1>
-        <p class="aboutmedescription">A computer science student at the University of Warwick</p>
-        {% else %}
-        <p class="aboutmedescription">Hi, I'm Joel, a Computer Science student at the University of Warwick. My passion
-            for computer science started in 2015 with my first proper computer science lessons at secondary school. As a
-            tech officer at <a href="https://uwcs.co.uk" class="aboutmelink">UWCS</a>, I help maintain various projects
-            such as servers, discord bots, and websites (such as this one).</p>
-        {% endif %}
+    {% if homepage %}
+    <div class="downarrowcontainer">
+        <svg class="downarrow" xlmns="http://www.w3.org/2000/svg" viewbox="0 0 512 512">
+            <g>
+                <path d="M256,0C114.618,0,0,114.618,0,256s114.618,256,256,256s256-114.618,256-256S397.382,0,256,0z M256,469.333
+            c-117.818,0-213.333-95.515-213.333-213.333S138.182,42.667,256,42.667S469.333,138.182,469.333,256S373.818,469.333,256,469.333
+            z" />
+                <path d="M347.582,198.248L256,289.83l-91.582-91.582c-8.331-8.331-21.839-8.331-30.17,0c-8.331,8.331-8.331,21.839,0,30.17
+            l106.667,106.667c8.331,8.331,21.839,8.331,30.17,0l106.667-106.667c8.331-8.331,8.331-21.839,0-30.17
+            C369.42,189.917,355.913,189.917,347.582,198.248z" />
+            </g>
+        </svg>
     </div>
 </div>
+{% endif %}

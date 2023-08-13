@@ -1,5 +1,18 @@
-.aboutme {
+.aboutmecontainer {
     height: 92vh;
+    width: 100%;
+}
+
+.aboutmefull {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.aboutme {
+    height: 90%;
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -55,8 +68,24 @@
     color: var(--accent);
 }
 
+.downarrowcontainer {
+    height: 5%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.downarrow {
+    height: 100%;
+    width: auto;
+    fill: var(--text);
+}
+
 @media screen and (max-width: 500px) {
-    .aboutme {
+
+    .aboutme,
+    .aboutmefull {
         flex-direction: column;
     }
 

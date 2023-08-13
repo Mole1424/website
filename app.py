@@ -202,9 +202,10 @@ def delete_project(project_id: int):
 
 def log_blog_change(ip: str, action: str, project_id: int, success: bool):
     # higher order functions++
-    status = "successfully" if success else "unsuccessfully"
     log_func = info if success else warning
-    log_func(f"{ip} {action} blog for project {project_id} {status}")
+    log_func(
+        f"{ip} {action} blog for project {project_id} {'' if success else 'un'}successfully"
+    )
 
 
 LOGIN_URL = "/" + getenv("LOGIN_URL")
