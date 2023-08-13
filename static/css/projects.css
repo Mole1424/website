@@ -1,33 +1,64 @@
 .projects {
     width: 90vw;
-    min-height: 92vh;
     margin: auto;
     padding-top: 4vh;
 }
 
 .project {
+    height: 25vh;
+    width: 90%;
     background-color: var(--background2);
     border-radius: 10px;
     color: var(--text);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     align-items: center;
-    padding: 1%;
-    padding-bottom: 2px;
     text-decoration: none;
-    margin-bottom: 10px;
 }
 
 .imgtitle {
-    width: 95%;
+    width: 100%;
+    height: 60%;
     position: relative;
 }
 
-.imgtitle img {
+.backgroundcontainer {
+    overflow: hidden;
     width: 100%;
     height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    object-fit: cover;
     border-radius: 10px;
+}
+
+.background {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    filter: blur(5px);
+    /*damn apple*/
+    -webkit-filter: blur(5px);
+}
+
+.foregroundcontainer {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    object-fit: contain;
+}
+
+.foreground {
+    max-width: 95%;
+    max-height: 95%;
+    object-fit: contain;
 }
 
 .overlay {
@@ -72,7 +103,7 @@
         gap: 10px;
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
         justify-items: center;
-        align-items: center;
+        align-items: stretch;
     }
 
     .project {
@@ -98,6 +129,7 @@
     }
 
     .project {
+        height: 80vh;
         width: 90vw;
         flex-shrink: 0;
         scroll-snap-align: start;

@@ -2,7 +2,12 @@
     {% for project in projects %}
     <a href="/projects/{{project.id}}" class="project">
         <div class="imgtitle">
-            <img src="{{ project.image }}" alt="{{ project.title }}">
+            <div class="backgroundcontainer">
+                <img class="background" src="{{ project.image }}" alt="{{ project.title }}">
+            </div>
+            <div class="foregroundcontainer">
+                <img class="foreground" src="{{ project.image }}" alt="{{ project.title }}">
+            </div>
             <div class="overlay">
                 <h1>{{ project.title }}</h1>
             </div>
