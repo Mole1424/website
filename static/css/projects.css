@@ -5,8 +5,7 @@
 }
 
 .project {
-    height: 25vh;
-    width: 90%;
+    width: 100%;
     background-color: var(--background2);
     border-radius: 10px;
     color: var(--text);
@@ -26,9 +25,6 @@
     overflow: hidden;
     width: 100%;
     height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
     object-fit: cover;
     border-radius: 10px;
 }
@@ -56,9 +52,10 @@
 }
 
 .foreground {
-    max-width: 95%;
-    max-height: 95%;
+    max-width: 100%;
+    max-height: 100%;
     object-fit: contain;
+    border-radius: 10px;
 }
 
 .overlay {
@@ -100,7 +97,7 @@
 @media screen and (min-width: 567px) {
     .projects {
         display: grid;
-        gap: 10px;
+        gap: 1vw;
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
         justify-items: center;
         align-items: stretch;
@@ -124,12 +121,12 @@
         display: flex;
         overflow: auto;
         scroll-snap-type: x mandatory;
-        scroll-padding: 0 2%;
+        scroll-padding: 0 5vw;
         padding: 0;
     }
 
     .project {
-        height: 80vh;
+        height: 50vh;
         width: 90vw;
         flex-shrink: 0;
         scroll-snap-align: start;
