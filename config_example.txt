@@ -1,0 +1,5 @@
+DB_URI:sqlite:///test.db
+DB_PASSWORD:hashed-db-password
+LOGGINGIN_URL:loggingin
+LOGIN_URL:login
+SECRET_KEY:secret-key

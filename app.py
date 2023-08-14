@@ -1,6 +1,6 @@
 from functools import wraps
 from logging import info, warning
-from os import getenv
+from os import getenv, environ
 
 from flask import Flask, redirect, render_template, request, session, url_for
 from flask_limiter import Limiter
@@ -10,6 +10,14 @@ from markupsafe import escape
 from werkzeug.security import check_password_hash
 
 from db_schema import Projects, db
+
+dev = False  # if true then uses config.txt instead of environment variables
+if dev:
+    with open("config.txt", "r") as f:
+        for line in f.readlines():
+            split_line = line.split(":")
+            environ[split_line[0]] = split_line[1]
+
 
 app = Flask(__name__)
 
