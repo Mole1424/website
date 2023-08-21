@@ -1,5 +1,5 @@
 from functools import wraps
-from logging import info, warning
+from logging import log, warning
 from os import getenv, environ
 
 from flask import Flask, redirect, render_template, request, session, url_for
@@ -114,6 +114,23 @@ def remove_amp_from_code_tags(text: str):
     return "\n".join(modified_lines)
 
 
+def add_stike_through(text: str):
+    # adds strike through to text
+    start_index = text.find("~~")
+    if start_index != -1:
+        end_index = text.find("~~", start_index + 2)
+        if end_index != -1:
+            added = (
+                text[:start_index]
+                + "<s>"
+                + text[start_index + 2 : end_index]
+                + "</s>"
+                + text[end_index + 2 :]
+            )
+            return add_stike_through(added)
+    return text
+
+
 @app.route("/projects/<int:project_id>/edit")
 @login_required
 def edit_project(project_id: int):
@@ -210,7 +227,7 @@ def delete_project(project_id: int):
 
 def log_blog_change(ip: str, action: str, project_id: int, success: bool):
     # higher order functions++
-    log_func = info if success else warning
+    log_func = log if success else warning
     log_func(
         f"{ip} {action} blog for project {project_id} {'' if success else 'un'}successfully"
     )
@@ -234,7 +251,7 @@ def login():
 def logging_in():
     if check_password_hash(password, request.form["password"]):
         session["logged_in"] = True
-        info(f"{request.remote_addr} logged in")
+        log(f"{request.remote_addr} logged in")
         return redirect("/")
     else:
         warning(
