@@ -76,8 +76,8 @@ def project(project_id: int):
     project = Projects.query.filter_by(id=project_id).first()
     if project is None:  # protect against invalid project ids which caused 500 errors
         return render_template("noproject.html")
-    markdown_html = remove_amp_from_code_tags(
-        markdown(escape(project.blog))
+    markdown_html = add_stike_through(
+        remove_amp_from_code_tags(markdown(escape(project.blog)))
     )  # converts markdown to html (escape is used to prevent xss)
     return render_template(
         "projectpage.html", project=project, markdown_html=markdown_html
