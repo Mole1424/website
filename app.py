@@ -1,5 +1,5 @@
 from functools import wraps
-from logging import log, warning
+from logging import INFO, basicConfig, info, warning
 from os import environ, getenv
 
 from flask import Flask, redirect, render_template, request, session
@@ -48,6 +48,8 @@ limiter = Limiter(  # limits the amount of requests per hour (mainly for logging
     default_limits=["50 per hour"],
     storage_uri="memory://",
 )
+
+basicConfig(level=INFO)  # allows info to be displayed in portainer logs
 
 
 @app.route("/")
@@ -227,7 +229,7 @@ def delete_project(project_id: int):
 
 def log_blog_change(ip: str, action: str, project_id: int, success: bool):
     # higher order functions++
-    log_func = log if success else warning
+    log_func = info if success else warning
     log_func(
         f"{ip} {action} blog for project {project_id} {'' if success else 'un'}successfully"
     )
@@ -251,7 +253,7 @@ def login():
 def logging_in():
     if check_password_hash(password, request.form["password"]):
         session["logged_in"] = True
-        log(f"{request.remote_addr} logged in")
+        info(f"{request.remote_addr} logged in")
         return redirect("/")
     else:
         warning(
