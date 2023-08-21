@@ -1,8 +1,8 @@
 from functools import wraps
 from logging import log, warning
-from os import getenv, environ
+from os import environ, getenv
 
-from flask import Flask, redirect, render_template, request, session, url_for
+from flask import Flask, redirect, render_template, request, session
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from markdown import markdown
@@ -257,4 +257,4 @@ def logging_in():
         warning(
             f"{request.remote_addr} failed to log in with password {request.form['password']}"
         )
-    return redirect(url_for(LOGIN_URL))
+    return redirect(LOGIN_URL)
