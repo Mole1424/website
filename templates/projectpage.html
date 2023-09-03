@@ -1,7 +1,11 @@
 {% extends "base.html" %}
 {% block title %} {{ project.title }} {% endblock %}
+{% block description %} {{ project.description }} {% endblock %}
 {% block head %}
 <link rel="stylesheet" href="../static/css/projectpage.css">
+<meta property="og:image"
+    content="{{'https://joelcoulon.com' if not project.image.startswith('https://')}}{{ project.image }}">
+<meta property="og:url" content="https://joelcoulon.com/projects/{{ project.id }}">
 {% endblock %}
 {% block content %}
 <article class="projectarticle">
