@@ -15,8 +15,8 @@ dev = False  # if true then uses config.txt instead of environment variables
 if dev:
     with open("config.txt", "r") as f:
         for line in f.readlines():
-            split_line = line.split(":")
-            environ[split_line[0]] = split_line[1]
+            split_line = line.split(";")
+            environ[split_line[0]] = split_line[1].strip()
 
 
 app = Flask(__name__)
