@@ -46,6 +46,10 @@
     text-decoration: underline;
 }
 
+.fullblog p:has(img) {
+    text-align: center;
+}
+
 .fullblog img {
     max-height: 25vh;
     max-width: 100%;
