@@ -7,7 +7,6 @@
     width: 100%;
     height: auto;
     display: flex;
-    justify-content: center;
     align-items: center;
     padding: 2vh 0;
 }
@@ -24,13 +23,16 @@
     flex-direction: column;
     padding-left: 3vw;
     width: 50%;
-    text-align: justify;
 }
 
 .description h1 {
     font-size: 8vh;
     margin-bottom: 2vh;
     margin-top: 1vh;
+}
+
+.description p {
+    text-align: justify;
 }
 
 .fullblog p {

@@ -17,7 +17,6 @@
 
 .imgtitle {
     width: 100%;
-    height: 60%;
     position: relative;
 }
 
@@ -98,7 +97,7 @@
     .projects {
         display: grid;
         gap: 1vw;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
         justify-items: center;
         align-items: stretch;
         margin-bottom: 2vh;
