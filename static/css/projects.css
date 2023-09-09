@@ -119,14 +119,22 @@
         display: flex;
         overflow: auto;
         scroll-snap-type: x mandatory;
-        scroll-padding: 0 5vw;
+        scroll-padding: 0 2.5vw;
         padding: 0;
     }
 
     .project {
-        width: 90vw;
+        width: 80vw;
         flex-shrink: 0;
-        scroll-snap-align: start;
-        margin: auto 5vw;
+        scroll-snap-align: center;
+        margin: auto 2.5vw;
+    }
+
+    .project:first-child {
+        margin-left: 7.5vw;
+    }
+
+    .project:last-child {
+        margin-right: 7.5vw;
     }
 }
