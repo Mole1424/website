@@ -73,6 +73,9 @@ def projects():
 
 @app.route("/projects/smallprojects")
 def small_projects():
+    projects = get_projects_from_db(True)
+    for project in projects:
+        project.description = convert_to_html(project.description)
     return render_template("smallprojects.html", projects=get_projects_from_db(True))
 
 
@@ -81,9 +84,7 @@ def project(project_id: int):
     project = Projects.query.filter_by(id=project_id).first()
     if project is None:  # protect against invalid project ids which caused 500 errors
         return render_template("noproject.html")
-    markdown_html = add_stike_through(
-        remove_amp_from_code_tags(markdown(escape(project.blog)))
-    )  # converts markdown to html (escape is used to prevent xss)
+    markdown_html = convert_to_html(project.blog)
     return render_template(
         "projectpage.html", project=project, markdown_html=markdown_html
     )
@@ -98,6 +99,14 @@ def get_projects_from_db(small: bool):
         projects = [project for project in projects if project.blog != ""]
     projects.reverse()
     return projects
+
+
+def convert_to_html(text: str):
+    escaped = escape(text)
+    markdown_html = markdown(escaped)
+    coded_html = remove_amp_from_code_tags(markdown_html)
+    striked_html = add_stike_through(coded_html)
+    return striked_html
 
 
 def remove_amp_from_code_tags(text: str):

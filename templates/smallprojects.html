@@ -16,9 +16,7 @@
                 {{ project.title }}
             </h2>
             <p class="id">{{project.id}}</p>
-            <p>
-                {{ project.description }}
-            </p>
+            {{ project.description | safe }}
         </li>
         {% else %}
         <li>

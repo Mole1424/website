@@ -12,3 +12,18 @@ h1 {
 .id {
     display: none;
 }
+
+p {
+    text-align: justify;
+}
+
+code {
+    font-family: monospace;
+}
+
+@media screen and (max-width: 500px) {
+    article {
+        padding-top: 10vh;
+        width: 80vw;
+    }
+}
