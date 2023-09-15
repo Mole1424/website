@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %} Small Projects {% endblock %}
+{% block description %} A list of small projects that don't have their own blog {% endblock %}
+{% block head %}
+<link rel="stylesheet" href="../static/css/smallprojects.css">
+<meta property="og:url" content="https://joelcoulon.com/projects/smallprojects">
+{% endblock %}
+{% block content %}
+<article>
+    <h1>Small Projects</h1>
+    <p>A list of small projects that don't have their own blog, but I still think are cool :)</p>
+    <ul>
+        {% for project in projects %}
+        <li>
+            <h2>
+                {{ project.title }}
+            </h2>
+            <p class="id">{{project.id}}</p>
+            <p>
+                {{ project.description }}
+            </p>
+        </li>
+        {% else %}
+        <li>
+            <p>No small projects yet :(</p>
+        </li>
+        {% endfor %}
+    </ul>
+</article>
+{% endblock %}

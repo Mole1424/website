@@ -55,9 +55,9 @@ basicConfig(level=INFO)  # allows info to be displayed in portainer logs
 @app.route("/")
 @app.route("/home")
 def home():
-    projects = Projects.query.all()
-    projects.reverse()  # reverses the order of the projects so newest is first
-    return render_template("home.html", homepage=True, projects=projects)
+    return render_template(
+        "home.html", homepage=True, projects=get_projects_from_db(False)
+    )
     # hompeage is used to determine whether to show the long about me or not
 
 
@@ -68,9 +68,12 @@ def about_me():
 
 @app.route("/projects")
 def projects():
-    projects = Projects.query.all()
-    projects.reverse()
-    return render_template("projectspage.html", projects=projects)
+    return render_template("projectspage.html", projects=get_projects_from_db(False))
+
+
+@app.route("/projects/smallprojects")
+def small_projects():
+    return render_template("smallprojects.html", projects=get_projects_from_db(True))
 
 
 @app.route("/projects/<int:project_id>")
@@ -84,6 +87,17 @@ def project(project_id: int):
     return render_template(
         "projectpage.html", project=project, markdown_html=markdown_html
     )
+
+
+def get_projects_from_db(small: bool):
+    projects = Projects.query.all()
+    # cursed way of filtering projects but works and I dont have to create a new table :)
+    if small:
+        projects = [project for project in projects if project.blog == ""]
+    else:
+        projects = [project for project in projects if project.blog != ""]
+    projects.reverse()
+    return projects
 
 
 def remove_amp_from_code_tags(text: str):
