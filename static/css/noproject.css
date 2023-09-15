@@ -17,12 +17,3 @@ body {
 .noproject p {
     font-size: 3vh;
 }
-
-.noproject a {
-    color: var(--accent);
-    text-decoration: none;
-}
-
-.noproject a:hover {
-    text-decoration: underline;
-}

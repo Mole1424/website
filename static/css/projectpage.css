@@ -39,15 +39,6 @@
     text-align: justify;
 }
 
-.fullblog a {
-    color: var(--accent);
-    text-decoration: none;
-}
-
-.fullblog a:hover {
-    text-decoration: underline;
-}
-
 .fullblog p:has(img) {
     text-align: center;
 }

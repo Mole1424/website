@@ -62,15 +62,14 @@
     position: relative;
     align-items: center;
     justify-content: center;
-    text-decoration: none;
     font-size: 3vh;
     color: var(--text);
     height: 100%;
-    transition: all 0.2s ease-in-out;
 }
 
 .navlink a:hover {
     color: var(--accent);
+    text-decoration: none;
 }
 
 .navsvg {

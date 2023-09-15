@@ -15,6 +15,10 @@
     text-decoration: none;
 }
 
+.project:hover {
+    text-decoration: none;
+}
+
 .imgtitle {
     width: 100%;
     position: relative;

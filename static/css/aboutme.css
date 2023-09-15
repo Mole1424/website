@@ -58,16 +58,6 @@
     padding-top: 2%;
 }
 
-.aboutmelink {
-    color: var(--text);
-    text-decoration: underline;
-    transition: all 0.2s ease-in;
-}
-
-.aboutmelink:hover {
-    color: var(--accent);
-}
-
 .downarrowcontainer {
     height: 5%;
     width: 100%;
