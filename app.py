@@ -11,7 +11,7 @@ from werkzeug.security import check_password_hash
 
 from db_schema import Projects, db
 
-dev = False  # if true then uses config.txt to set environment variables
+dev = True  # if true then uses config.txt to set environment variables
 if dev:
     with open("config.txt", "r") as f:
         for line in f.readlines():
@@ -42,12 +42,11 @@ def login_required(func):  # decorator to restrict access to certain pages
     return wrapper
 
 
-# limiter = Limiter(  # limits the amount of requests per hour (mainly for logging in page for security)
-#     get_remote_address,
-#     app=app,
-#     default_limits=["50 per hour"],
-#     storage_uri="memory://",
-# )
+limiter = Limiter(  # limits the amount of requests per hour (mainly for logging in page for security)
+    get_remote_address,
+    app=app,
+    storage_uri="memory://",
+)
 
 basicConfig(level=INFO)  # allows info to be displayed in portainer logs
 
@@ -91,14 +90,10 @@ def project(project_id: int):
 
 
 def get_projects_from_db(small: bool):
-    projects = Projects.query.all()
-    # cursed way of filtering projects but works and I dont have to create a new table :)
-    if small:
-        projects = [project for project in projects if project.blog == ""]
-    else:
-        projects = [project for project in projects if project.blog != ""]
-    projects.reverse()
-    return projects
+    projects = Projects.query.filter(
+        Projects.blog == "" if small else Projects.blog != ""
+    ).all()
+    return projects[::-1]
 
 
 def convert_to_html(text: str):
@@ -272,7 +267,7 @@ def login():
 
 
 @app.route(LOGGINGIN_URL, methods=["POST"])
-# @limiter.limit("50/hour")  # limits the amount of requests per hour
+@limiter.limit("50/hour")  # limits the amount of requests per hour
 def logging_in():
     if check_password_hash(password, request.form["password"]):
         session["logged_in"] = True
