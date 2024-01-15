@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %} Add Photo {% endblock %}
+{% block description %} Add a photo {% endblock %}
+{% block head %}
+<link rel="stylesheet" href="/static/css/editproject.css">
+{% endblock %}
+{% block content %}
+<form action="{{ action }}" method="post" class="projectform" enctype="multipart/form-data">
+    <div class="field">
+        <label for="photo">Image</label>
+        <input type="file" id="photo" name="photo" accept="image/*">
+    </div>
+    <div class="field">
+        <label for="password">Password</label><br>
+        <input type="password" id="password" name="password">
+    </div>
+    <input type="submit" value="Submit" class="projectbutton">
+</form>
+{% endblock %}

@@ -1,7 +1,7 @@
 <div class="aboutmecontainer">
     <div class="aboutme{{'full' if not homepage}}">
         <div class="aboutmelogocontainer">
-            <img src="../static/img/logo.png" alt="logo" class="aboutmelogo">
+            <img src="{{config['UPLOAD_FOLDER']}}logo.png" alt="logo" class="aboutmelogo">
         </div>
         <div class="aboutmetext">
             {% if homepage %}

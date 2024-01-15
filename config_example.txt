@@ -1,5 +1,7 @@
 DB_URI;sqlite:///test.db
+PHOTO_LOC;/path/to/img/
 DB_PASSWORD;hashed-db-password
 LOGGINGIN_URL;loggingin
 LOGIN_URL;login
+PHOTO_URL;photo
 SECRET_KEY;secret-key

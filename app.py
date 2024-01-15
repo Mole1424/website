@@ -1,13 +1,15 @@
 from functools import wraps
 from logging import INFO, basicConfig, info, warning
-from os import environ, getenv
+from os import environ, getenv, path, getcwd, remove
 
 from flask import Flask, redirect, render_template, request, session
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from markdown import markdown
 from markupsafe import escape
+from PIL import Image
 from werkzeug.security import check_password_hash
+from werkzeug.utils import secure_filename
 
 from db_schema import Projects, db
 
@@ -28,6 +30,9 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False  # sets up databases
 db.init_app(app)
 
 app.secret_key = getenv("SECRET_KEY")
+
+app.config["UPLOAD_FOLDER"] = getenv("PHOTO_LOC")
+app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024  # 16MB max upload size
 
 
 def login_required(func):  # decorator to restrict access to certain pages
@@ -255,6 +260,7 @@ def log_blog_change(ip: str, action: str, project_id: int, success: bool):
 
 LOGIN_URL = "/" + getenv("LOGIN_URL")
 LOGGINGIN_URL = "/" + getenv("LOGGINGIN_URL")
+PHOTO_URL = "/" + getenv("PHOTO_URL")
 
 
 @app.route(LOGIN_URL)
@@ -278,3 +284,41 @@ def logging_in():
             f"{request.remote_addr} failed to log in with password {request.form['password']}"
         )
     return redirect(LOGIN_URL)
+
+
+@app.route(PHOTO_URL, methods=["GET", "POST"])
+@login_required
+def upload_photo():
+    if (
+        request.method == "POST"
+        and check_password_hash(password, request.form["password"])
+        and "photo" in request.files
+        and request.files["photo"].filename != ""
+    ):
+        photo = request.files["photo"]
+
+        if not photo.filename.endswith((".png", ".jpg", ".jpeg")):  # checks file type
+            return "<h1>Invalid file type</h1>"
+
+        filename = secure_filename(photo.filename)
+        filepath = path.join(getcwd(), app.config["UPLOAD_FOLDER"][1:], filename)
+        # update filename if already exists
+        i = 1
+        while path.exists(filepath):
+            filename = f"{i}{filename}"
+            filepath = path.join(getcwd(), app.config["UPLOAD_FOLDER"][1:], filename)
+            i += 1
+        photo.save(filepath)
+
+        # check if image is valid
+        # done after save because some weird reason `Image.open(photo)` corrupts the image and I have no clue why
+        try:
+            Image.open(filepath).verify()
+        except Exception as e:
+            remove(filepath)
+            warning(f"{request.remote_addr} uploaded invalid image: {e}")
+            return "<h1>Invalid image</h1>"
+
+        info(f"{request.remote_addr} uploaded photo {filename}")
+        return f"<h1>Photo uploaded successfully to {filepath}</h1><img src='{app.config['UPLOAD_FOLDER']}{filename}' alt='uploaded photo'>"
+    return render_template("uploadphoto.html", action=PHOTO_URL)
