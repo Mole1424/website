@@ -32,7 +32,6 @@ db.init_app(app)
 app.secret_key = getenv("SECRET_KEY")
 
 app.config["UPLOAD_FOLDER"] = getenv("PHOTO_LOC")
-app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024  # 16MB max upload size
 
 
 def login_required(func):  # decorator to restrict access to certain pages
@@ -300,24 +299,26 @@ def upload_photo():
         if not photo.filename.endswith((".png", ".jpg", ".jpeg")):  # checks file type
             return "<h1>Invalid file type</h1>"
 
+        try:
+            # checks if image is valid
+            Image.open(photo).verify()
+        except Exception as e:
+            warning(f"{request.remote_addr} uploaded invalid image: {e}")
+            return "<h1>Invalid image</h1>"
+
+        # set up initial (secure) filepath
         filename = secure_filename(photo.filename)
         filepath = path.join(getcwd(), app.config["UPLOAD_FOLDER"][1:], filename)
-        # update filename if already exists
+        # if file already exists then add a number to the start of the filename
         i = 1
         while path.exists(filepath):
             filename = f"{i}{filename}"
             filepath = path.join(getcwd(), app.config["UPLOAD_FOLDER"][1:], filename)
             i += 1
-        photo.save(filepath)
 
-        # check if image is valid
-        # done after save because some weird reason `Image.open(photo)` corrupts the image and I have no clue why
-        try:
-            Image.open(filepath).verify()
-        except Exception as e:
-            remove(filepath)
-            warning(f"{request.remote_addr} uploaded invalid image: {e}")
-            return "<h1>Invalid image</h1>"
+        # save file to disk (seek(0) is to reset the stream as it is read in the verify function)
+        photo.stream.seek(0)
+        photo.save(filepath)
 
         info(f"{request.remote_addr} uploaded photo {filename}")
         return f"<h1>Photo uploaded successfully to {filepath}</h1><img src='{app.config['UPLOAD_FOLDER']}{filename}' alt='uploaded photo'>"
