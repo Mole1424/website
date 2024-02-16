@@ -2,3 +2,4 @@
 instance/
 config.txt
 /static/img/
+/__pycache__/
