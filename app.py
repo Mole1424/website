@@ -16,7 +16,6 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from markdown import markdown
 from markupsafe import escape
-from PIL import Image
 from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
 
@@ -318,12 +317,6 @@ def add_photo(
         if not photo.filename.endswith((".png", ".jpg", ".jpeg")):
             return "<h1>Invalid file type</h1>"
 
-        try:
-            Image.open(photo).verify()
-        except Exception as e:
-            warning(f"{request.remote_addr} uploaded invalid image: {e}")
-            return "<h1>Invalid image</h1>"
-
         file_name, ext = path.splitext(secure_filename(photo.filename))
         if dog:
             file_name = "bear"
@@ -339,7 +332,6 @@ def add_photo(
             file_path = f"{base_path}{i}{ext}"
             i += 1
 
-        photo.stream.seek(0)
         photo.save(file_path)
 
         info(f"{request.remote_addr} uploaded photo {file_name} to {file_path}")

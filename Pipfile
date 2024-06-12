@@ -10,7 +10,6 @@ flask-sqlalchemy = "*"
 markdown = "*"
 werkzeug = "*"
 flask-limiter = "*"
-pillow = "*"
 
 [dev-packages]
 
