@@ -1,6 +1,6 @@
 from functools import wraps
 from logging import INFO, basicConfig, info, warning
-from os import environ, getenv, path, getcwd, remove
+from os import environ, getenv, path, getcwd, makedirs
 
 from flask import Flask, redirect, render_template, request, session
 from flask_limiter import Limiter
@@ -13,7 +13,7 @@ from werkzeug.utils import secure_filename
 
 from db_schema import Projects, db
 
-dev = False  # if true then uses config.txt to set environment variables
+dev = True  # if true then uses config.txt to set environment variables
 if dev:
     with open("config.txt", "r") as f:
         for line in f.readlines():
@@ -309,6 +309,11 @@ def upload_photo():
         # set up initial (secure) filepath
         filename = secure_filename(photo.filename)
         filepath = path.join(getcwd(), app.config["UPLOAD_FOLDER"][1:], filename)
+
+        # create directory if it doesn't exist
+        if not path.exists(path.dirname(filepath)):
+            makedirs(path.dirname(filepath))
+
         # if file already exists then add a number to the start of the filename
         i = 1
         while path.exists(filepath):
