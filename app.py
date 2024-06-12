@@ -269,6 +269,7 @@ def log_blog_change(ip: str, action: str, project_id: int, success: bool):
 LOGIN_URL = "/" + getenv("LOGIN_URL")
 LOGGINGIN_URL = "/" + getenv("LOGGINGIN_URL")
 PHOTO_URL = "/" + getenv("PHOTO_URL")
+DOG_URL = "/dog/" + getenv("PHOTO_URL")
 
 
 @app.route(LOGIN_URL)
@@ -325,7 +326,7 @@ def add_photo(
 
         file_name, ext = path.splitext(secure_filename(photo.filename))
         if dog:
-            file_name = "bear1"
+            file_name = "bear"
 
         base_path = path.join(getcwd(), upload_folder[1:], file_name)
         file_path = base_path + ext
@@ -334,7 +335,7 @@ def add_photo(
             makedirs(path.dirname(file_path))
 
         i = 1
-        while path.exists(file_path):
+        while path.exists(file_path) or file_name == "bear":
             file_path = f"{base_path}{i}{ext}"
             i += 1
 
@@ -367,7 +368,7 @@ def specific_dog(dog_id: int):
     return send_from_directory("static/img/dog", dog_image)
 
 
-@app.route("/dog/add", methods=["GET", "POST"])
+@app.route(DOG_URL, methods=["GET", "POST"])
 @login_required
 def add_dog():
     if request.method == "POST":
