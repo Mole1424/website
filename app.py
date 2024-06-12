@@ -21,7 +21,7 @@ from werkzeug.utils import secure_filename
 
 from db_schema import Projects, db
 
-dev = False  # if true then uses config.txt to set environment variables
+dev = True  # if true then uses config.txt to set environment variables
 if dev:
     with open("config.txt", "r") as f:
         for line in f.readlines():
@@ -328,7 +328,7 @@ def add_photo(
             makedirs(path.dirname(file_path))
 
         i = 1
-        while path.exists(file_path) or file_name == "bear":
+        while path.exists(file_path) or (dog and i == 1):
             file_path = f"{base_path}{i}{ext}"
             i += 1
 
