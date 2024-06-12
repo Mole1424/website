@@ -341,7 +341,7 @@ def add_photo(
         photo.stream.seek(0)
         photo.save(file_path)
 
-        info(f"{request.remote_addr} uploaded photo {file_name}")
+        info(f"{request.remote_addr} uploaded photo {file_name} to {file_path}")
         return f"""
         <h1>Photo uploaded successfully to {file_path}</h1>
         <h1><a href='/'>Home</a></h1>
