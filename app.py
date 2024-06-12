@@ -373,4 +373,4 @@ def specific_dog(dog_id: int):
 def add_dog():
     if request.method == "POST":
         return add_photo(request, f"{app.config['UPLOAD_FOLDER']}dog/", True)
-    return render_template("uploadphoto.html", action="/dog/add")
+    return render_template("uploadphoto.html", action=DOG_URL)
