@@ -1,8 +1,17 @@
 from functools import wraps
 from logging import INFO, basicConfig, info, warning
-from os import environ, getenv, path, getcwd, makedirs
+from os import environ, getenv, path, getcwd, makedirs, listdir
+from random import randint
 
-from flask import Flask, redirect, render_template, request, session
+from flask import (
+    Flask,
+    redirect,
+    render_template,
+    request,
+    Request,
+    session,
+    send_from_directory,
+)
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from markdown import markdown
@@ -13,7 +22,7 @@ from werkzeug.utils import secure_filename
 
 from db_schema import Projects, db
 
-dev = False  # if true then uses config.txt to set environment variables
+dev = True  # if true then uses config.txt to set environment variables
 if dev:
     with open("config.txt", "r") as f:
         for line in f.readlines():
@@ -288,43 +297,79 @@ def logging_in():
 @app.route(PHOTO_URL, methods=["GET", "POST"])
 @login_required
 def upload_photo():
+    if request.method == "POST":
+        return add_photo(request, app.config["UPLOAD_FOLDER"])
+    return render_template("uploadphoto.html", action=PHOTO_URL)
+
+
+def add_photo(
+    request: Request,
+    upload_folder: str,
+    dog: bool = False,
+):
     if (
-        request.method == "POST"
-        and check_password_hash(password, request.form["password"])
+        check_password_hash(password, request.form["password"])
         and "photo" in request.files
         and request.files["photo"].filename != ""
     ):
         photo = request.files["photo"]
 
-        if not photo.filename.endswith((".png", ".jpg", ".jpeg")):  # checks file type
+        if not photo.filename.endswith((".png", ".jpg", ".jpeg")):
             return "<h1>Invalid file type</h1>"
 
         try:
-            # checks if image is valid
             Image.open(photo).verify()
         except Exception as e:
             warning(f"{request.remote_addr} uploaded invalid image: {e}")
             return "<h1>Invalid image</h1>"
 
-        # set up initial (secure) filepath
-        filename = secure_filename(photo.filename)
-        filepath = path.join(getcwd(), app.config["UPLOAD_FOLDER"][1:], filename)
+        file_name, ext = path.splitext(secure_filename(photo.filename))
+        if dog:
+            file_name = "bear1"
 
-        # create directory if it doesn't exist
-        if not path.exists(path.dirname(filepath)):
-            makedirs(path.dirname(filepath))
+        base_path = path.join(getcwd(), upload_folder[1:], file_name)
+        file_path = base_path + ext
 
-        # if file already exists then add a number to the start of the filename
+        if not path.exists(path.dirname(file_path)):
+            makedirs(path.dirname(file_path))
+
         i = 1
-        while path.exists(filepath):
-            filename = f"{i}{filename}"
-            filepath = path.join(getcwd(), app.config["UPLOAD_FOLDER"][1:], filename)
+        while path.exists(file_path):
+            file_path = f"{base_path}{i}{ext}"
             i += 1
 
-        # save file to disk (seek(0) is to reset the stream as it is read in the verify function)
         photo.stream.seek(0)
-        photo.save(filepath)
+        photo.save(file_path)
 
-        info(f"{request.remote_addr} uploaded photo {filename}")
-        return f"<h1>Photo uploaded successfully to {filepath}</h1><img src='{app.config['UPLOAD_FOLDER']}{filename}' alt='uploaded photo'>"
-    return render_template("uploadphoto.html", action=PHOTO_URL)
+        info(f"{request.remote_addr} uploaded photo {file_name}")
+        return f"""
+        <h1>Photo uploaded successfully to {file_path}</h1>
+        <h1><a href='/'>Home</a></h1>
+        <img src='{upload_folder}{file_name}{ext}' alt='uploaded photo'>"""
+    return "<h1>Invalid request</h1>"
+
+
+@app.route("/dog/")
+def dog():
+    # get random dog image from /static/img/dog/ folder
+    dog_images = listdir("static/img/dog")
+    dog_image = dog_images[randint(0, len(dog_images) - 1)]
+    return send_from_directory("static/img/dog", dog_image)
+
+
+@app.route("/dog/<int:dog_id>")
+def specific_dog(dog_id: int):
+    # get specific dog image from /static/img/dog/ folder
+    dog_images = listdir("static/img/dog")
+    if dog_id < 0 or dog_id >= len(dog_images):
+        return "<h1>Invalid dog id</h1>"
+    dog_image = dog_images[dog_id]
+    return send_from_directory("static/img/dog", dog_image)
+
+
+@app.route("/dog/add", methods=["GET", "POST"])
+@login_required
+def add_dog():
+    if request.method == "POST":
+        return add_photo(request, f"{app.config['UPLOAD_FOLDER']}dog/", True)
+    return render_template("uploadphoto.html", action="/dog/add")
