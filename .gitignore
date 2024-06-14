@@ -3,3 +3,4 @@ instance/
 config.txt
 /static/img/
 /__pycache__/
+/static/volume/

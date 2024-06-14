@@ -21,7 +21,7 @@ from werkzeug.utils import secure_filename
 
 from db_schema import Projects, db
 
-dev = False  # if true then uses config.txt to set environment variables
+dev = True  # if true then uses config.txt to set environment variables
 if dev:
     with open("config.txt", "r") as f:
         for line in f.readlines():
@@ -338,10 +338,10 @@ def add_photo(
 
 @app.route("/dog/")
 def dog():
-    # get random dog image from /static/img/dog/ folder
-    dog_images = listdir("static/img/dog")
+    # serve random dog image
+    dog_images = listdir(app.config["UPLOAD_FOLDER"] + "dog")
     dog_image = dog_images[randint(0, len(dog_images) - 1)]
-    return send_from_directory("static/img/dog", dog_image)
+    return send_from_directory(app.config["UPLOAD_FOLDER"] + "dog", dog_image)
 
 
 @app.route(DOG_URL, methods=["GET", "POST"])
