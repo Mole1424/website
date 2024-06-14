@@ -8,10 +8,80 @@
 <meta property="og:url" content="https://joelcoulon.com/">
 {% endblock %}
 {% block content %}
-{% with homepage=homepage %}
-{% include 'aboutme.html' %}
-{% endwith %}
-{% with projects=projects %}
-{% include 'projects.html' %}
-{% endwith %}
+<div class="aboutmecontainer">
+    <div class="aboutme">
+        <div class="aboutmelogocontainer">
+            <img src="{{config['UPLOAD_FOLDER']}}logo.png" alt="logo" class="aboutmelogo">
+        </div>
+        <div class="aboutmetextcontainer">
+            <div class="aboutmetext">
+                <h1 class="aboutmename">Hi, I'm Joel</h1>
+                <p class="aboutmedescription">A computer science student at the University of Warwick</p>
+            </div>
+            <div class="aboutmetext" id="aboutme">
+                <p class="aboutmedescription">My passion for computer science started in 2015 with my first proper computer science lessons at secondary school. As a tech officer at <a href="https://uwcs.co.uk" class="aboutmelink">UWCS</a>, I help maintain various projects such as servers, discord bots, and websites (such as this one). I also have a <a href="/dog/">dog</a> called Bear</p>
+            </div>
+        </div>
+    </div>
+    <div class="downarrowcontainer">
+        <svg xmlns="http://www.w3.org/2000/svg" class="downarrow" fill="#fff" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm45.66-109.66a8,8,0,0,1,0,11.32l-40,40a8,8,0,0,1-11.32,0l-40-40a8,8,0,0,1,11.32-11.32L128,140.69l34.34-34.35A8,8,0,0,1,173.66,106.34Z"></path></svg>
+    </div>
+</div>
+<div class="projects" id="projects">
+    <div class="projectsintro">
+        <h2>Projects</h2>
+        <p class="projectsdescription">Here are some of the projects I've worked on. Click on a project to learn more about it.</p>
+        <p>I also have a list of <a href="/projects/smallprojects">smaller projects</a> which I think are cool but aren't big enough to have their own full blog.</p>
+    </div>
+    <div class="projectcards">
+        {% for project in projects %}
+            <a href="/projects/{{project.id}}" class="project">
+                <div class="imgtitle">
+                    <div class="backgroundcontainer">
+                        <img class="background" src="{{config['UPLOAD_FOLDER'] if not project.image.startswith('https://')}}{{ project.image }}" alt="{{ project.title }} background">
+                    </div>
+                    <div class="foregroundcontainer">
+                        <img class="foreground" src="{{config['UPLOAD_FOLDER'] if not project.image.startswith('https://')}}{{ project.image }}" alt="{{ project.title }} foreground">
+                    </div>
+                    <div class="overlay">
+                        <h1>{{ project.title }}</h1>
+                    </div>
+                </div>
+                <p class="projectdescription">{{ project.description }}</p>
+            </a>
+        {% else %}
+            <div class="noitem">
+                <p class="noproject">No projects found, please check back soon™</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<script>
+    //keep image in place on scroll until projects comes into view
+    window.addEventListener('scroll', function() {
+        if (window.innerWidth > 500){
+            var imageContainer = document.querySelector('.aboutmelogocontainer');
+            var projects = document.querySelector('.projects');
+            var aboutme = document.querySelector('.aboutmetextcontainer');
+            var downarrow = document.querySelector('.downarrowcontainer');
+            
+            if (window.scrollY <= projects.offsetTop - window.innerHeight) {
+                // Image is in view
+                imageContainer.style.position = 'fixed';
+                imageContainer.style.top = '5%';
+                aboutme.style.margin = '0 0 0 auto';
+                downarrow.style.transition = 'opacity 0.5s';
+                if (window.scrollY > 0) {
+                    downarrow.style.opacity = '0';
+                } else {
+                    downarrow.style.opacity = '1';
+                }
+            } else {
+                // Image is out of view
+                imageContainer.style.position = 'absolute';
+                imageContainer.style.top = (projects.offsetTop - window.innerHeight) + 'px';
+            }
+        }
+    });
+</script>
 {% endblock %}

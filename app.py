@@ -66,20 +66,7 @@ basicConfig(level=INFO)  # allows info to be displayed in portainer logs
 @app.route("/")
 @app.route("/home")
 def home():
-    return render_template(
-        "home.html", homepage=True, projects=get_projects_from_db(False)
-    )
-    # hompeage is used to determine whether to show the long about me or not
-
-
-@app.route("/aboutme")
-def about_me():
-    return render_template("aboutmepage.html", homepage=False)
-
-
-@app.route("/projects")
-def projects():
-    return render_template("projectspage.html", projects=get_projects_from_db(False))
+    return render_template("home.html", projects=get_projects_from_db(False))
 
 
 @app.route("/projects/smallprojects")
@@ -308,30 +295,37 @@ def add_photo(
     dog: bool = False,
 ):
     if (
+        # pre=checks
         check_password_hash(password, request.form["password"])
         and "photo" in request.files
         and request.files["photo"].filename != ""
     ):
         photo = request.files["photo"]
 
+        # only allow png, jpg, jpeg files
         if not photo.filename.endswith((".png", ".jpg", ".jpeg")):
             return "<h1>Invalid file type</h1>"
 
+        # get filename and extension
         file_name, ext = path.splitext(secure_filename(photo.filename))
         if dog:
             file_name = "bear"
 
+        # split path
         base_path = path.join(getcwd(), upload_folder[1:], file_name)
         file_path = base_path + ext
 
+        # create directory if it doesn't exist
         if not path.exists(path.dirname(file_path)):
             makedirs(path.dirname(file_path))
 
+        # stop duplicate file names
         i = 1
         while path.exists(file_path) or (dog and i == 1):
             file_path = f"{base_path}{i}{ext}"
             i += 1
 
+        # save photo
         photo.save(file_path)
 
         info(f"{request.remote_addr} uploaded photo {file_name} to {file_path}")
@@ -350,19 +344,10 @@ def dog():
     return send_from_directory("static/img/dog", dog_image)
 
 
-@app.route("/dog/<int:dog_id>")
-def specific_dog(dog_id: int):
-    # get specific dog image from /static/img/dog/ folder
-    dog_images = listdir("static/img/dog")
-    if dog_id < 0 or dog_id >= len(dog_images):
-        return "<h1>Invalid dog id</h1>"
-    dog_image = dog_images[dog_id]
-    return send_from_directory("static/img/dog", dog_image)
-
-
 @app.route(DOG_URL, methods=["GET", "POST"])
 @login_required
 def add_dog():
+    # add a dog
     if request.method == "POST":
         return add_photo(request, f"{app.config['UPLOAD_FOLDER']}dog/", True)
     return render_template("uploadphoto.html", action=DOG_URL)

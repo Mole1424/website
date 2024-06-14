@@ -11,17 +11,17 @@
     <p>A list of small projects that don't have their own blog, but I still think are cool :)</p>
     <ul>
         {% for project in projects %}
-        <li>
-            <h2>
-                {{ project.title }}
-            </h2>
-            <p class="id">{{project.id}}</p>
-            {{ project.description | safe }}
-        </li>
+            <li>
+                <h2>
+                    {{ project.title }}
+                </h2>
+                <p class="id">{{project.id}}</p>
+                {{ project.description | safe }}
+            </li>
         {% else %}
-        <li>
-            <p>No small projects yet :(, please check back soon™</p>
-        </li>
+            <li>
+                <p>No small projects yet :(, please check back soon™</p>
+            </li>
         {% endfor %}
     </ul>
 </article>

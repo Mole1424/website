@@ -3,15 +3,13 @@
 {% block description %} {{ project.description }} {% endblock %}
 {% block head %}
 <link rel="stylesheet" href="/static/css/projectpage.css">
-<meta property="og:image"
-    content="{{config['UPLOAD_FOLDER'] if not project.image.startswith('https://')}}{{ project.image }}">
+<meta property="og:image" content="{{config['UPLOAD_FOLDER'] if not project.image.startswith('https://')}}{{ project.image }}">
 <meta property="og:url" content="https://joelcoulon.com/projects/{{ project.id }}">
 {% endblock %}
 {% block content %}
 <article class="projectarticle">
     <div class="imgtitle">
-        <img src="{{config['UPLOAD_FOLDER'] if not project.image.startswith('https://')}}{{ project.image }}"
-            alt="{{ project.title }}">
+        <img src="{{config['UPLOAD_FOLDER'] if not project.image.startswith('https://')}}{{ project.image }}" alt="{{ project.title }}">
         <div class="description">
             <h1>{{ project.title }}</h1>
             <p>{{ project.description }}</p>

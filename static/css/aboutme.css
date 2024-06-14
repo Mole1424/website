@@ -1,14 +1,6 @@
 .aboutmecontainer {
-    height: 92vh;
+    height: 192vh;
     width: 100%;
-}
-
-.aboutmefull {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
 }
 
 .aboutme {
@@ -22,21 +14,28 @@
 .aboutmelogocontainer {
     height: 100%;
     width: 50%;
+    margin-top: 8vh;
     display: flex;
     justify-content: center;
-    align-items: center;
-    overflow: hidden;
+    align-items: flex-start;
 }
 
 .aboutmelogo {
-    height: auto;
     width: 80%;
     border-radius: 10%;
 }
 
+.aboutmetextcontainer {
+    height: 192vh;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+}
+
 .aboutmetext {
     height: 100%;
-    width: 50%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -64,6 +63,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    transform: translateY(-100vh);
 }
 
 .downarrow {
@@ -74,9 +74,12 @@
 
 @media screen and (max-width: 500px) {
 
-    .aboutme,
-    .aboutmefull {
+    .aboutme {
         flex-direction: column;
+    }
+
+    .aboutmecontainer {
+        height: auto;
     }
 
     .aboutmelogocontainer {
@@ -85,12 +88,26 @@
         overflow: visible;
     }
 
+    .aboutmetextcontainer {
+        width: 100%;
+        height: 100%;
+    }
+
     .aboutmetext {
         width: 100%;
+    }
+
+    .aboutmedescription:nth-child(1) {
+        height: auto;
+        font-size: 2vh;
     }
 
     .aboutmename {
         text-align: center;
         font-size: 15vw;
+    }
+
+    .downarrowcontainer {
+        display: none;
     }
 }

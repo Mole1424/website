@@ -7,24 +7,24 @@
 {% block content %}
 <form action="{{ action }}" method="post" class="projectform">
     {% if delete %}
-    <p>WARNING!!!! This cannot be undone</p>
+        <p>WARNING!!!! This cannot be undone</p>
     {% else %}
-    <div class="field">
-        <label for="title">Title</label><br>
-        <input type="text" id="title" name="title" value="{{ title }}">
-    </div>
-    <div class="field">
-        <label for="description">Description</label><br>
-        <textarea id="description" name="description">{{ description }}</textarea>
-    </div>
-    <div class="field">
-        <label for="image">Image</label><br>
-        <input type="text" id="image" name="image" value="{{ image }}">
-    </div>
-    <div class="field">
-        <label for="blog">Blog</label><br>
-        <textarea id="blog" name="blog">{{ blog }}</textarea>
-    </div>
+        <div class="field">
+            <label for="title">Title</label><br>
+            <input type="text" id="title" name="title" value="{{ title }}">
+        </div>
+        <div class="field">
+            <label for="description">Description</label><br>
+            <textarea id="description" name="description">{{ description }}</textarea>
+        </div>
+        <div class="field">
+            <label for="image">Image</label><br>
+            <input type="text" id="image" name="image" value="{{ image }}">
+        </div>
+        <div class="field">
+            <label for="blog">Blog</label><br>
+            <textarea id="blog" name="blog">{{ blog }}</textarea>
+        </div>
     {% endif %}
     <div class="field">
         <label for="password">Password</label><br>
