@@ -1,7 +1,7 @@
 from functools import wraps
 from logging import INFO, basicConfig, info, warning
 from os import environ, getenv, path, getcwd, makedirs, listdir
-from random import randint
+from random import choice
 
 from flask import (
     Flask,
@@ -339,9 +339,8 @@ def add_photo(
 @app.route("/dog/")
 def dog():
     # serve random dog image
-    dog_images = listdir(app.config["UPLOAD_FOLDER"] + "dog")
-    dog_image = dog_images[randint(0, len(dog_images) - 1)]
-    return send_from_directory(app.config["UPLOAD_FOLDER"] + "dog", dog_image)
+    dog_image = choice(listdir(app.config["UPLOAD_FOLDER"][1:] + "dog/"))
+    return send_from_directory(app.config["UPLOAD_FOLDER"][1:] + "dog/", dog_image)
 
 
 @app.route(DOG_URL, methods=["GET", "POST"])
