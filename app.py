@@ -21,7 +21,7 @@ from werkzeug.utils import secure_filename
 
 from db_schema import Projects, db
 
-dev = True  # if true then uses config.txt to set environment variables
+dev = False  # if true then uses config.txt to set environment variables
 if dev:
     with open("config.txt", "r") as f:
         for line in f.readlines():
