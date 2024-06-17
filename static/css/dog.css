@@ -1,0 +1,34 @@
+.dogpics {
+    margin: 1vw;
+    width: 98vw;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-rows: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1vw;
+}
+
+.dogpic {
+    border-radius: 10px;
+    place-self: center;
+    max-height: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    animation: dogpicfade 0.5s ease-out backwards;
+}
+
+.dogpiclarge {
+    grid-row: span 2 / auto;
+    grid-column: span 2 / auto;
+}
+
+@keyframes dogpicfade {
+    from {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

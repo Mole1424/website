@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %} Bear {% endblock %}
+{% block description %} All pics of Bear {% endblock %}
+{% block head %}
+<link rel="stylesheet" href="/static/css/dog.css">
+{% endblock %}
+
+{% block content %}
+<div class="dogpics">
+    {% for pic in pics%}
+    <img class="dogpic {% if loop.index is divisibleby 5 %}dogpiclarge{% endif %}"
+        style="animation-delay: calc({{loop.index * 100}}ms);" src="{{pic}}" alt="Bear">
+    {% endfor %}
+</div>
+{% endblock %}

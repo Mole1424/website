@@ -1,7 +1,7 @@
 from functools import wraps
 from logging import INFO, basicConfig, info, warning
 from os import environ, getenv, path, getcwd, makedirs, listdir
-from random import choice
+from random import choice, shuffle
 
 from flask import (
     Flask,
@@ -341,6 +341,17 @@ def dog():
     # serve random dog image
     dog_image = choice(listdir(app.config["UPLOAD_FOLDER"][1:] + "dog/"))
     return send_from_directory(app.config["UPLOAD_FOLDER"][1:] + "dog/", dog_image)
+
+
+@app.route("/dog/all/")
+def all_dogs():
+    # serve all dog images
+    dog_images = [
+        f"{app.config['UPLOAD_FOLDER']}dog/{dog}"
+        for dog in listdir(app.config["UPLOAD_FOLDER"][1:] + "dog/")
+    ]
+    shuffle(dog_images)
+    return render_template("dog.html", pics=dog_images)
 
 
 @app.route(DOG_URL, methods=["GET", "POST"])
