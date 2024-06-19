@@ -1,7 +1,9 @@
+from base64 import b64encode
 from functools import wraps
 from logging import INFO, basicConfig, info, warning
 from os import environ, getenv, path, getcwd, makedirs, listdir
 from random import choice, shuffle
+from requests import delete, get, put
 
 from flask import (
     Flask,
@@ -21,7 +23,7 @@ from werkzeug.utils import secure_filename
 
 from db_schema import Projects, db
 
-dev = False  # if true then uses config.txt to set environment variables
+dev = True  # if true then uses config.txt to set environment variables
 if dev:
     with open("config.txt", "r") as f:
         for line in f.readlines():
@@ -172,14 +174,19 @@ def editing_project(project_id: int):
     log_blog_change(request.remote_addr, "edited", project_id, correct_password)
     # edits project if password is correct
     if correct_password:
+        # gets all the data from the form and updates the project
+        # dont have to check for change as all fields are pre-populated
         project = Projects.query.filter_by(id=project_id).first()
         project.title = request.form["title"]
         project.description = request.form["description"]
         project.image = request.form["image"]
         project.blog = request.form["blog"]
         db.session.commit()
-        # gets all the data from the form and updates the project
-        # dont have to check for change as all fields are pre-populated
+
+        # commit change to github
+        content = project.blog if project.blog != "" else project.description
+        commit(project_id, content, True)
+
         return redirect(f"/projects/{project_id}")
     return redirect(f"/projects/{project_id}/edit")
 
@@ -213,8 +220,12 @@ def creating_new_project():
         )
         db.session.add(project)
         db.session.commit()
+
         log_blog_change(request.remote_addr, "created", project.id, True)
+        content = project.blog if project.blog != "" else project.description
+        commit(project.id, content)
         return redirect(f"/projects/{project.id}")
+
     log_blog_change(request.remote_addr, "created", -1, False)
     return redirect("/projects/newproject")
 
@@ -240,8 +251,40 @@ def delete_project(project_id: int):
         project = Projects.query.filter_by(id=project_id).first()
         db.session.delete(project)
         db.session.commit()
+
+        commit(project_id, update=True)
+
         return redirect("/projects")
     return redirect(f"/projects/{project_id}")
+
+
+github_token = getenv("GITHUB_TOKEN")
+repo_url = "https://api.github.com/repos/Mole1424/blog-backup/contents/"
+
+
+def commit(project_id: int, content: str = "", update: bool = False):
+    # commit change to github
+    headers = {
+        "Accept": "application/vnd.github.v3+json",
+        "Authorization": f"Bearer {github_token}",
+        "X-GitHub-Api-Version": "2022-11-28",
+    }
+
+    data = {
+        "message": f"Updated blog for project {project_id}",
+    }
+    if content != "":
+        data["content"] = b64encode(content.encode("ascii")).decode()
+    if update:
+        data["sha"] = get(f"{repo_url}{project_id}.md", headers=headers).json()["sha"]
+
+    request = delete if (update and content == "") else put
+
+    request(
+        f"{repo_url}{project_id}.md",
+        headers=headers,
+        json=data,
+    )
 
 
 def log_blog_change(ip: str, action: str, project_id: int, success: bool):
